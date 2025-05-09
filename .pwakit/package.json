@@ -1,0 +1,17 @@
+{
+  "name": "pwakit-next-builder",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build-next-pwakit.js",
+    "build:pwakit": "pwa-kit-dev build",
+    "push": "pwa-kit-dev push --projectSlug \"drossman-dev\" --target \"development\"",
+    "logs": "pwa-kit-dev tail-logs --project \"drossman-dev\" --environment \"development\""
+  },
+  "dependencies": {
+    "@salesforce/pwa-kit-dev": "^3.5.0",
+    "@salesforce/pwa-kit-runtime": "^3.5.0",
+    "chalk": "^4.1.2",
+    "winston": "^3.11.0"
+  }
+}
