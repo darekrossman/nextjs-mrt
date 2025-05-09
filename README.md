@@ -72,6 +72,12 @@ When deploying to MRT:
 3. The application is deployed to your Salesforce Commerce Cloud project space
 4. MRT handles the serving, scaling, and infrastructure management
 
+## Streaming Limitations with MRT
+
+While this project leverages React Server Components for improved performance and server-side rendering capabilities, it's important to note a specific limitation when deploying to Salesforce Managed Runtime (MRT).
+
+Features that rely on HTTP streaming, such as React's `<Suspense />` component and Next.js's `loading.tsx` file convention, will not stream in the MRT environment. Instead, these features will fall back to traditional blocking request behavior. This means that while you can still use these patterns in your code, the incremental rendering benefits of streaming will not be realized on MRT. Despite this, the use of React Server Components still provides significant advantages in terms of bundle size reduction and server-driven UI.
+
 ## Scripts
 
 - `npm run dev` - Start development server
