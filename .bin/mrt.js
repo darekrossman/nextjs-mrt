@@ -10,18 +10,20 @@ const path = require('node:path')
 const os = require('node:os')
 const dotenv = require('dotenv')
 
+dotenv.config({ path: '.env.local' })
+
 /**
  * Gets the project ID from environment variables or returns the default
  */
 function getProjectId() {
-  return 'drossman-dev'
+  return process.env.MRT_PROJECT_SLUG
 }
 
 /**
  * Gets the target (environment) from environment variables or returns the default
  */
 function getTarget() {
-  return 'development'
+  return process.env.MRT_TARGET_ENV
 }
 
 /**
@@ -77,11 +79,10 @@ async function createEnvironmentVariable(variable) {
  * Retrieves all environment variables for a PWA Kit project
  * @returns {Promise<Array<Object>>} Promise with the list of environment variables
  */
-async function getEnvironmentVariables(_options = {}) {
-  // const projectId = getProjectId()
-  // const target = options.target || getTarget()
-
-  const url = 'https://drossman-dev-development.mobify-storefront.com/api/env-var'
+async function getEnvironmentVariables(options = {}) {
+  const projectId = getProjectId()
+  const target = options.target || getTarget()
+  const url = `https://cloud.mobify.com/api/projects/${projectId}/target/${target}/env-var/`
 
   const response = await fetch(url, {
     method: 'GET',

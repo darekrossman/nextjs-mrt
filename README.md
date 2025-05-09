@@ -1,6 +1,6 @@
 # Salesforce PWAKit + Next.js
 
-A Next.js application with Salesforce PWAKit integration for running on Managed Runtime, using React 19, TypeScript, and PandaCSS for styling. 
+A Next.js + Salesforce [e-commerce reference application](https://github.com/vercel-partner-solutions/nextjs-salesforce-commerce-cloud) with PWAKit integration for running on Managed Runtime.
 
 ---
 
@@ -11,19 +11,15 @@ A Next.js application with Salesforce PWAKit integration for running on Managed 
 ## Features
 
 - React 19 + Next.js 15
+- Tailwind CSS for styling
+- Biome for linting and formatting
 - 💥 Custom build process to support Salesforce Managed Runtime (MRT) deployment.
 
 ## Prerequisites
 
-- Node.js 18.x or higher
-- npm 9.x or higher
 - Salesforce Commerce Cloud account (for MRT deployment)
 
 ## Getting Started
-
-### Contentstack ENV
-
-⚠️ You wont have a contentstack .env to work with, so recommend commenting out the `<MegaMenu>` from the homepage. This area is WIP.
 
 ### Installation
 
@@ -36,7 +32,7 @@ npm install
 All development happens from root - no need to go into `.pwakit` from here. 
 
 ```bash
-# Run the development server (from root)
+# Run the development server
 npm run dev
 ```
 
@@ -51,7 +47,7 @@ npm run build
 
 ### Deployment to Salesforce MRT
 
-This needs manual configuration. You can update the `push` script in `.pwakit/package.json` to point to your own project and environment. 
+The `push` script will use your `MRT_PROJECT_SLUG` and `MRT_TARGET_ENV` when publishing to MRT. See `.pwakit/package.json` to customize.
 
 ```bash
 # Deploy to development environment on MRT
@@ -83,5 +79,6 @@ When deploying to MRT:
 - `npm run build` - Build complete application with PWAKit for MRT deployment
 - `npm run push` - Deploy to development environment on MRT
 - `npm run start` - Start production server locally
-- `npm run lint` - Run ESLint
-- `npm run prepare` - Generate PandaCSS code 
+- `npm run lint` - Run Biome to check and fix code
+- `npm run env:push` - Push local .env.local to MRT environment
+- `npm run env:pull` - Pull MRT environment variables to .env.local (must be deployed to MRT first)

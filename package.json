@@ -7,8 +7,8 @@
     "push": "cd .pwakit && npm run push",
     "start": "next start",
     "lint": "biome check --fix --unsafe",
-    "env:push": "node .bin/mrt.js env push --file=.env.local",
-    "env:pull": "node .bin/mrt.js env pull"
+    "env:push": "mrt env push --file=.env.local",
+    "env:pull": "mrt env pull"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
@@ -46,5 +46,8 @@
     "node-fetch": "^3.3.2",
     "tailwindcss": "^4.0.8",
     "typescript": "5.8.3"
+  },
+  "bin": {
+    "mrt": "./.bin/mrt.js"
   }
 }

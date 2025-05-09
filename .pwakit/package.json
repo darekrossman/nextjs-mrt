@@ -1,17 +1,18 @@
 {
-  "name": "pwakit-next-builder",
+  "name": "pwakit-nextjs-mrt-wrapper",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "build": "node scripts/build-next-pwakit.js",
     "build:pwakit": "pwa-kit-dev build",
-    "push": "pwa-kit-dev push --projectSlug \"drossman-dev\" --target \"development\"",
-    "logs": "pwa-kit-dev tail-logs --project \"drossman-dev\" --environment \"development\""
+    "push": "dotenv -e ../.env -- pwa-kit-dev push --projectSlug \"$PROJECT_SLUG\" --target \"$TARGET_ENV\"",
+    "logs": "dotenv -e ../.env -- pwa-kit-dev tail-logs --project \"$MRT_PROJECT_SLUG\" --environment \"$MRT_TARGET_ENV\""
   },
   "dependencies": {
     "@salesforce/pwa-kit-dev": "^3.5.0",
     "@salesforce/pwa-kit-runtime": "^3.5.0",
     "chalk": "^4.1.2",
-    "winston": "^3.11.0"
+    "winston": "^3.11.0",
+    "dotenv": "^16.5.0"
   }
 }
