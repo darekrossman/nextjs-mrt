@@ -1,25 +1,25 @@
 # Custom Next.js PWAKit Build Process Overview
 
-This document outlines the custom build process used to wrap a Next.js application within PWAKit, preparing it for deployment on the Managed Runtime (MRT). The process involves several key steps, focusing on integrating the Next.js standalone build output with PWAKit's structure and runtime.
+This document outlines the custom build process used build and prepare a Next.js application with for deployment on Salesforce's Managed Runtime (MRT). The process involves several key steps, focusing on integrating the Next.js standalone build output with PWAKit's tooling and runtime.
 
 ## Key Components and Configuration
 
 ### 1. `next.config.ts`
 
-The Next.js configuration is essential for preparing the application for the PWAKit environment.
+The Next.js configuration is essential for preparing the application for the MRT environment.
 
-- **`output: 'standalone'`**: During the production build (`PHASE_PRODUCTION_BUILD`), this option is enabled. It creates a `.next/standalone` directory containing only the necessary files to run the Next.js application, including a minimal Node.js server. This is required for creating a lean deployment package for serverless environments like MRT.
+- **`output: 'standalone'`**: During the production build (`PHASE_PRODUCTION_BUILD`), this option is enabled. It creates a `.next/standalone` directory containing only the necessary files to run the Next.js application, including a minimal Node.js server (which we don't actually use). This is required for creating a lean deployment package for serverless environments like MRT.
 - **`compress: false`**: Compression is disabled in the Next.js build because MRT handles asset compression.
 - **Experimental Features**: The configuration enables or disables certain Next.js experimental features (e.g., `ppr`, `inlineCss`, `useCache`, `clientSegmentCache`) based on compatibility or performance considerations with MRT.
 - **Image Optimization**: Specifies allowed remote patterns for image optimization, ensuring images from designated Salesforce Commerce Cloud domains can be processed.
 
 ### 2. The `.pwakit` Directory
 
-This directory is central to PWAKit integration. It contains its own `package.json`, scripts, and configuration files that orchestrate the build and define the PWAKit-specific parts of the application.
+This is where all PWAKit-related tooling and scripts are conveniently hidden away. It contains its own `package.json`, scripts, and configuration files that orchestrate the build and define the PWAKit-specific parts of the application.
 
 - **`.pwakit/package.json`**:
     - Defines scripts like `build: node scripts/build-next-pwakit.js`, which is the primary script for the custom build process.
-    - Includes dependencies such as `@salesforce/pwa-kit-dev` and `@salesforce/pwa-kit-runtime`, which provide the tools and runtime for PWAKit.
+    - Includes dependencies such as `@salesforce/pwa-kit-dev` and `@salesforce/pwa-kit-runtime`, which provide the SSR bundling and runtime dependencies for MRT.
 - **`.pwakit/scripts/build-next-pwakit.js`**: This Node.js script is the engine of the custom build. Its main responsibilities are detailed in the "Build Steps" section below.
 - **`.pwakit/app/`**: This directory is the staging area where Next.js build artifacts are combined with PWAKit components.
     - **`.pwakit/app/next/`**: The Next.js build output (`.next` directory) is copied here.
@@ -31,7 +31,7 @@ This directory is central to PWAKit integration. It contains its own `package.js
 
 ### 3. `ssr-shim.js` (located in `.pwakit/app/ssr-shim.js`)
 
-This JavaScript file acts as a bridge between the PWAKit runtime and the Next.js standalone server.
+This JavaScript file acts as a bridge between the PWAKit runtime and the Next.js standalone server. After the build, it will serve as the bundle's actual `ssr.js` entry point.
 
 - **Dynamic Configuration Injection**: The `build-next-pwakit.js` script injects the Next.js runtime configuration (extracted from the Next.js build) into this file.
 - **`distDir` Modification**: It explicitly sets `nextConfig.distDir = './build/next/standalone/next'`. This directs the Next.js server (which is part of the standalone output) to find its build artifacts within the PWAKit `build` directory structure.
